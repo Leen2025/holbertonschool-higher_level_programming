@@ -101,4 +101,4 @@ class Rectangle:
         and decrement the instance counter.
         """
         print("Bye rectangle...")
-        Rectangle.number_of_instances -= 1 
+        Rectangle.number_of_instances -= 1
