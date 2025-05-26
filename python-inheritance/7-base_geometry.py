@@ -3,7 +3,6 @@
 Expands BaseGeometry class to include integer validation.
 """
 
-
 class BaseGeometry:
     """
     BaseGeometry class with methods to raise an exception for
@@ -14,9 +13,6 @@ class BaseGeometry:
         """
         Raises an Exception with the message that the method is
         not implemented.
-
-        Raises:
-            Exception: "area() is not implemented"
         """
         raise Exception("area() is not implemented")
 
@@ -29,10 +25,10 @@ class BaseGeometry:
             value (any): The value to validate.
 
         Raises:
-            TypeError: If value is not an integer.
+            TypeError: If value is not a true integer (not bool or other types).
             ValueError: If value is less or equal to 0.
         """
-        if not isinstance(value, int):
+        if type(value) is not int:
             raise TypeError(f"{name} must be an integer")
         if value <= 0:
             raise ValueError(f"{name} must be greater than 0")
