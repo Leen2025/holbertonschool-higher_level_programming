@@ -1,19 +1,9 @@
 #!/usr/bin/python3
-"""
-Defines MyList, a subclass of list, with additional functionality to
-print sorted lists.
-"""
-
+"""Defines a subclass MyList that inherits from list."""
 
 class MyList(list):
-    """
-    MyList inherits from the built-in list class, adding a method to print
-    the list sorted.
-    """
+    """A subclass of list with a method to print sorted elements."""
 
     def print_sorted(self):
-        """
-        Prints the elements of the list sorted in ascending order without
-        altering the original list.
-        """
+        """Prints the list elements in sorted (ascending) order."""
         print(sorted(self))
