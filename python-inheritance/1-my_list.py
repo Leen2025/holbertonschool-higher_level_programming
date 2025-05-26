@@ -1,16 +1,19 @@
 #!/usr/bin/python3
-"""Defines a subclass MyList that inherits from list.
-
->>> m = MyList([3, 1, 2])
->>> m.print_sorted()
-[1, 2, 3]
->>> print(m)
-[3, 1, 2]
+"""
+Defines MyList, a subclass of list, with additional functionality to
+print sorted lists.
 """
 
+
 class MyList(list):
-    """A subclass of list with a method to print sorted elements."""
+    """
+    MyList inherits from the built-in list class, adding a method to print
+    the list sorted.
+    """
 
     def print_sorted(self):
-        """Prints the list elements in sorted (ascending) order."""
+        """
+        Prints the elements of the list sorted in ascending order without
+        altering the original list.
+        """
         print(sorted(self))
