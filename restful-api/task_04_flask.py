@@ -1,74 +1,52 @@
-from flask import Flask, jsonify, request, Response
-import json
-from collections import OrderedDict
+#!/usr/bin/python3
+"""Flask API with basic routing, JSON data, and POST support"""
+
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-# Ordered dict.
-users = {
-    "jane": OrderedDict([
-        ('username', 'jane'), 
-        ('name', 'Jane'), 
-        ('age', 28), 
-        ('city', 'Los Angeles')
-    ]),
-    "john": OrderedDict([
-        ('username', 'john'), 
-        ('name', 'John'), 
-        ('age', 30), 
-        ('city', 'New York')
-    ])
-}
+# In-memory user store
+users = {}
 
 @app.route('/')
 def home():
+    """Root route returns a welcome message"""
     return "Welcome to the Flask API!"
-
-
-@app.route('/data')
-def data():
-    return jsonify(list(users.keys()))
-
 
 @app.route('/status')
 def status():
+    """Status check route"""
     return "OK"
 
+@app.route('/data')
+def data():
+    """Return list of all usernames"""
+    return jsonify(list(users.keys()))
 
 @app.route('/users/<username>')
 def get_user(username):
+    """Return full user data for a given username"""
     user = users.get(username)
     if user:
-        response = json.dumps(user, ensure_ascii=False)
-        return Response(response, mimetype='application/json')
+        return jsonify(user)
     else:
-        return jsonify({"message": "User not found"}), 404
-
+        return jsonify({"error": "User not found"}), 404
 
 @app.route('/add_user', methods=['POST'])
 def add_user():
-    user_data = request.get_json()
-    if not user_data or 'username' not in user_data or not user_data['username']:
-        return jsonify({"message": "Missing or empty username"}), 400
+    """Add new user via POST request"""
+    data = request.get_json()
 
-    if any(field not in user_data or not user_data[field] for field in ['name', 'age', 'city']):
-        return jsonify({"message": "Missing required field"}), 400
+    if not data or "username" not in data:
+        return jsonify({"error": "Username is required"}), 400
 
-    username = user_data['username']
-    if username in users:
-        return jsonify({"message": "User already exists"}), 409
+    username = data["username"]
+    users[username] = data
 
-    ordered_user_data = OrderedDict([
-        ('username', username),
-        ('name', user_data['name']),
-        ('age', user_data['age']),
-        ('city', user_data['city'])
-    ])
-
-    users[username] = ordered_user_data
-    response = json.dumps({"message": "User added", "user": ordered_user_data}, ensure_ascii=False)
-    return Response(response, mimetype='application/json')
-
+    return jsonify({
+        "message": "User added",
+        "user": data
+    }), 201
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run()
